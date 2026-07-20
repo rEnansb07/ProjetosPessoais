@@ -4,13 +4,25 @@ multiplicadores2 = 11
 soma = igualdade = repeticao = 0
 cpf = str(dados.leiaint('Insira seu CPF: ')) #Tratamento de exceções caso o CPF não seja um número
 lista = cpf.split() #Separação do CPF em algarismos
-print(lista)
-if len(cpf) != 11:
+#print(lista)
+if len(cpf) == 10: # Tratando o bug quando o CPF começa com zero
+    cpf = str('0') + lista[0]
+    lista.append(cpf)
+    lista.pop(0)
+    igualdade = 0
+    print(lista)
+elif len(cpf) != 11 and not len(cpf) == 10:
     while len(cpf) != 11:
         print('Insira corretamente o seu CPF: ')
         cpf = str(dados.leiaint('Insira seu CPF: '))
         lista = cpf.split()
-igualdade = int(lista[0][0]) #Selecionando o primeiro digíto como base
+        if len(cpf) == 10:
+            lista = str('0') + lista[0]
+            print(lista)
+            igualdade = 0
+            break
+if len(cpf) == 11:
+    igualdade = int(lista[0][0]) #Selecionando o primeiro digíto como base
 for numero in range(0,11): #Verificando se todos os dígitos são iguais
     if igualdade == int(lista[0][numero]):
         repeticao += 1
@@ -28,26 +40,27 @@ if repeticao != 11:
         validacao = 0
     print(lista[0][9])
     print(validacao)
-    print(repeticao)
     if int(lista[0][9]) != validacao:
-        print('CPF inválido')
+        print('CPF inválido1')
 else:
-    print('CPF inválido!')
+    print('CPF inválido!2')
 soma = 0 # Redefinição da variável pra segunda validação
 for item in lista:
     for numero in item:
-        if multiplicadores == 1:
+        if multiplicadores2 == 1:
             break
         numero = int(numero)
         soma = soma + (numero * multiplicadores2)
-        multiplicadores = multiplicadores - 1
+        multiplicadores2 -= 1
 validacao2 = ((soma * 10) % 11)
 if validacao2 == 10:
     validacao2 = 0
-print(lista[0][10])
-print(validacao2)
+print(soma)
+#print(lista[0][10])
+#print(validacao2)
 if int(lista[0][10]) != validacao2:
-    print('CPF inválido')
-print('CPF totalmente validado com sucesso!')
+    print('CPF inválido3')
+else:
+    print('CPF totalmente validado com sucesso!')
 
 
