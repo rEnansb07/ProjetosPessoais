@@ -8,43 +8,24 @@ def verificar_repeticao(digito1, cpf):
     else:
         return False
 
-def validar_verificadores(lista):
-    multiplicadores = 10
+def validar_verificadores(lista, multiplicador_inicial):
+    digito_final = multiplicador_inicial
     soma = 0
     for item in lista: #Multiplicando cada número
         for numero in item:
-            if multiplicadores == 1:
+            if multiplicador_inicial == 1:
                 break
             numero = int(numero)
-            soma = soma + (numero * multiplicadores)
-            multiplicadores = multiplicadores-1
+            soma = soma + (numero * multiplicador_inicial)
+            multiplicador_inicial = multiplicador_inicial - 1
 
     validacao = (soma * 10) % 11 #Realização da verificação do primeiro dígito através da soma
     if validacao == 10:
         validacao = 0
-    print(lista[0][9])
-    print(validacao)
-    if int(lista[0][9]) != validacao:
-        return 'CPF inválido!'
+    if int(lista[0][digito_final - 1]) != validacao:
+        return False
     else:
-        soma = 0 # Redefinição da variável pra segunda validação
-        multiplicadores = 11
-        for item in lista:
-            for numero in item: # Realização da verificação do segundo dígito através da soma
-                if multiplicadores == 1:
-                    break
-                numero = int(numero)
-                soma = soma + (numero * multiplicadores)
-                multiplicadores -= 1
-        validacao2 = ((soma * 10) % 11)
-        if validacao2 == 10:
-            validacao2 = 0
-        #print(lista[0][10])
-        #print(validacao2)
-        if int(lista[0][10]) != validacao2:
-            return 'CPF inválido!'
-        else:
-            return 'CPF totalmente validado com sucesso!'
+        return True
 
 def leiaint(msg):
     while True:
@@ -76,7 +57,7 @@ def leiaint(msg):
 #Programa Principal
 primeiro_digito = 0
 cpf = str(leiaint('Insira seu CPF: ')) # Tratamento de exceções caso o CPF não seja um número
-lista = cpf.split() # Separação do CPF em algarismos
+lista = cpf.split()
 if len(cpf) == 10: # Tratando o bug quando o CPF começa com zero
     cpf = str('0') + lista[0]
     lista.append(cpf)
@@ -96,7 +77,10 @@ elif len(cpf) != 11 and not len(cpf) == 10: # Loop caso o cpf inserido anteriorm
 if len(cpf) == 11:
     primeiro_digito = int(lista[0][0]) #Selecionando o primeiro digíto como base
 if not verificar_repeticao(primeiro_digito, lista[0]):
-    print(validar_verificadores(lista))
+    if validar_verificadores(lista, 10) and validar_verificadores(lista, 11):
+         print('CPF válido!')
+    else:
+         print('CPF inválido!')
 else:
     print('CPF inválido!')
 
